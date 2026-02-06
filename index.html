@@ -3,24 +3,31 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Voice Recorder</title>
-
+  <title>TOEIC Speaking – Read Aloud Practice</title>
   <style>
     :root{
-      --bg:#f3f5f7;
-      --card:#ffffff;
-      --text:#1f2937;
+      /* Rise-ish clean neutrals + one primary */
+      --bg:#f6f7f9;
+      --surface:#ffffff;
+      --text:#111827;
       --muted:#6b7280;
       --border:#e5e7eb;
-      --shadow:0 10px 28px rgba(17,24,39,.08);
+      --shadow:0 12px 30px rgba(17,24,39,.08);
+
       --primary:#2563eb;
       --primaryHover:#1d4ed8;
+
       --danger:#ef4444;
       --dangerHover:#dc2626;
+
       --success:#16a34a;
       --successHover:#15803d;
-      --ghost:#f9fafb;
-      --radius:14px;
+
+      --ink:#0f172a;
+      --radius:16px;
+      --radiusSm:12px;
+
+      --focus: 0 0 0 3px rgba(37,99,235,.22);
     }
 
     *{ box-sizing:border-box; }
@@ -28,114 +35,196 @@
       margin:0;
       background:var(--bg);
       color:var(--text);
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-      line-height:1.45;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      line-height:1.5;
     }
 
-    .page{
-      max-width: 980px;
+    /* Layout */
+    .wrap{
+      max-width: 1040px;
       margin: 0 auto;
-      padding: 28px 16px 64px;
+      padding: 24px 16px 72px;
     }
 
-    .card{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding: 24px;
+    .topbar{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom: 14px;
+    }
+
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
     }
 
     .title{
-      margin: 0;
+      margin:0;
       font-size: 22px;
-      letter-spacing: -0.01em;
-      display:flex;
-      gap:10px;
-      align-items:center;
+      letter-spacing: -0.02em;
+      line-height:1.25;
     }
-
     .subtitle{
-      margin: 10px 0 16px;
-      color: var(--muted);
+      margin:0;
+      color:var(--muted);
       font-size: 14px;
-      max-width: 72ch;
+      max-width: 78ch;
     }
 
-    .prompt{
-      margin: 14px 0 18px;
-      background:#f7f8fa;
-      border:1px solid var(--border);
-      border-left: 4px solid #2f6fed;
-      border-radius: 12px;
-      padding: 14px 14px;
-    }
-    .prompt h2{
-      margin: 0 0 10px;
-      font-size: 14px;
-      color: #111827;
-      display:flex;
-      align-items:center;
-      gap:8px;
-    }
-
-    /* Text block */
-    .promptText{
-      margin: 0;
-      color:#111827;
-      font-size: 14px;
-      line-height: 1.6;
-      white-space: pre-wrap;
-      font-style: italic; /* ✅ only the text is italic */
-    }
-
-    .instruction{
-      margin-top: 14px;  /* ✅ extra empty line before instructions */
-      font-size: 13px;
-      color: #4b5563;
-      font-style: normal;
-    }
-
-    .meta{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      flex-wrap:wrap;
-      margin: 10px 0 14px;
-    }
-    .pill{
+    .badge{
       display:inline-flex;
       align-items:center;
       gap:8px;
       padding: 8px 10px;
       border:1px solid var(--border);
-      border-radius:999px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.6);
+      backdrop-filter: blur(6px);
+      font-size: 13px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .card{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .cardHead{
+      padding: 18px 18px 0;
+    }
+
+    /* Two-column “Rise-like” content block */
+    .grid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 18px;
+      padding: 18px;
+    }
+    @media (max-width: 880px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    /* Prompt block */
+    .prompt{
+      border:1px solid var(--border);
+      border-radius: var(--radiusSm);
+      background: #fbfbfc;
+      padding: 16px;
+    }
+    .promptHeader{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom: 10px;
+    }
+    .promptTitle{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--ink);
+      margin:0;
+    }
+
+    .phase{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      border:1px solid var(--border);
+      color: var(--muted);
+      background:#fff;
+    }
+    .phaseDot{
+      width:8px; height:8px; border-radius:999px;
+      background:#cbd5e1;
+    }
+    .phase.isRecording .phaseDot{ background: var(--danger); }
+    .phase.isReady .phaseDot{ background: #94a3b8; }
+    .phase.isDone .phaseDot{ background: var(--success); }
+
+    .promptText{
+      margin:0;
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.65;
+      white-space: pre-wrap;
+      font-style: italic;
+    }
+
+    .instruction{
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      border:1px solid #dbeafe;
+      background:#eff6ff;
+      color:#1e3a8a;
+      font-size: 13px;
+    }
+
+    /* Right panel */
+    .panel{
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+    }
+
+    .metaRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 9px 10px;
+      border:1px solid var(--border);
+      border-radius: 999px;
       font-size:13px;
-      color:var(--muted);
-      background:#fafafa;
+      color: var(--muted);
+      background:#fff;
     }
     .timer{
-      font-weight: 700;
-      color: var(--text);
+      font-weight: 800;
+      color: var(--ink);
       font-variant-numeric: tabular-nums;
+      letter-spacing: .02em;
     }
 
     .controls{
       display:flex;
-      gap:10px;
       flex-wrap:wrap;
-      margin: 8px 0 12px;
+      gap: 10px;
     }
+
     button{
       border:0;
-      border-radius: 10px;
-      padding: 10px 14px;
+      border-radius: 12px;
+      padding: 11px 14px;
       font-size: 14px;
+      font-weight: 650;
       cursor:pointer;
-      transition: transform .02s ease, background .15s ease, opacity .15s ease;
+      transition: transform .02s ease, background .15s ease, opacity .15s ease, box-shadow .15s ease;
     }
     button:active{ transform: translateY(1px); }
     button:disabled{ opacity:.55; cursor:not-allowed; }
+
+    button:focus-visible{
+      outline:none;
+      box-shadow: var(--focus);
+    }
 
     .btnPrimary{ background: var(--primary); color:#fff; }
     .btnPrimary:hover{ background: var(--primaryHover); }
@@ -143,65 +232,81 @@
     .btnDanger{ background: var(--danger); color:#fff; }
     .btnDanger:hover{ background: var(--dangerHover); }
 
-    .btnGhost{ background: var(--ghost); color: var(--text); border:1px solid var(--border); }
-    .btnGhost:hover{ background:#f3f4f6; }
-
     .btnSuccess{ background: var(--success); color:#fff; }
     .btnSuccess:hover{ background: var(--successHover); }
 
-    .btnDownload{ background:#0f172a; color:#fff; }
-    .btnDownload:hover{ background:#111827; }
+    .btnGhost{
+      background:#fff;
+      border:1px solid var(--border);
+      color: var(--ink);
+    }
+    .btnGhost:hover{ background:#f3f4f6; }
 
-    /* ✅ Make Return button more visible */
+    .btnInk{ background: var(--ink); color:#fff; }
+    .btnInk:hover{ background:#111827; }
+
+    audio{
+      width:100%;
+      margin-top: 2px;
+      border-radius: 12px;
+    }
+
+    .hint{
+      padding: 12px 12px;
+      border-radius: 12px;
+      border:1px solid #e0e7ff;
+      background:#f5f7ff;
+      font-size: 13px;
+      color:#374151;
+    }
+
+    .bottomBar{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .bottomBar .spacer{ flex:1; }
+
     .btnReturn{
       background: var(--primary);
       color:#fff;
-      padding: 12px 18px;
-      font-weight: 700;
+      padding: 12px 16px;
+      font-weight: 800;
       box-shadow: 0 10px 22px rgba(37,99,235,.18);
     }
     .btnReturn:hover{ background: var(--primaryHover); }
 
-    audio{
-      width: 100%;
-      margin-top: 10px;
-    }
-
-    /* ✅ Bottom bar: Download left, Return right */
-    .bottomBar{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-      margin-top: 10px;
-    }
-    .bottomBar .spacer{ flex:1; }
     @media (max-width: 520px){
-      .bottomBar button{
-        width: 100%;
-      }
+      .bottomBar button{ width:100%; }
       .bottomBar .spacer{ display:none; }
     }
 
-    .hint{
-      margin-top: 14px;
-      padding: 12px 12px;
-      border-left: 4px solid #c7d2fe;
-      background:#f5f7ff;
-      border-radius: 12px;
-      font-size: 13px;
-      color: #374151;
-    }
-
+    /* Saved takes */
     .saved{
-      margin-top: 18px;
       border-top:1px solid var(--border);
-      padding-top: 16px;
+      padding: 18px;
+      background: #fff;
+    }
+    .savedHead{
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom: 10px;
     }
     .saved h3{
-      margin: 0 0 10px;
+      margin:0;
       font-size: 16px;
+      letter-spacing: -0.01em;
     }
+    .savedNote{
+      margin:0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
     .savedList{
       display:flex;
       flex-direction:column;
@@ -245,11 +350,13 @@
       border-radius: 10px;
       font-size: 13px;
       text-decoration:none;
-      color: var(--text);
+      color: var(--ink);
       background:#fff;
       cursor:pointer;
+      font-weight: 650;
     }
     .linkBtn:hover{ background:#f9fafb; }
+
     .dangerLink{
       border-color:#fecaca;
       color:#991b1b;
@@ -257,7 +364,7 @@
     }
     .dangerLink:hover{ background:#ffecec; }
 
-    /* PRO modal overlay */
+    /* Modal overlay */
     .overlay{
       position:fixed;
       inset:0;
@@ -279,6 +386,7 @@
     .modal h3{
       margin:0 0 8px;
       font-size:16px;
+      letter-spacing:-0.01em;
     }
     .modal p{
       margin:0 0 12px;
@@ -293,67 +401,100 @@
       justify-content:flex-end;
     }
 
-    @media (min-width: 980px){
-      .card{ padding: 28px; }
+    /* Accessibility helper */
+    .srOnly{
+      position:absolute;
+      width:1px; height:1px;
+      padding:0; margin:-1px;
+      overflow:hidden;
+      clip:rect(0,0,0,0);
+      white-space:nowrap;
+      border:0;
     }
   </style>
 </head>
 
 <body>
-  <div class="page">
-    <div class="card">
-      <h1 class="title">🎙️ Record your voice</h1>
-      <div class="subtitle">
-        Click <strong>Start recording</strong>, then read the text below aloud.
-      </div>
-
-      <div class="prompt" id="promptBox">
-        <h2>📄 Text to read aloud</h2>
-
-        <p class="promptText" id="promptText">Please note that the office will be closed on Friday afternoon for scheduled maintenance.
-Employees are asked to complete any urgent tasks before noon.</p>
-
-                <p class="instruction">
-          ╰┈➤ You have 45 seconds to prepare (read the text silently). You will then have 45 seconds to read the text aloud.
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <h1 class="title">TOEIC Speaking – Read a Text Aloud</h1>
+        <p class="subtitle">
+          Click <strong>Start recording</strong>, then read the text below aloud. This is a practice tool (not the official TOEIC interface).
         </p>
       </div>
+      <div class="badge" aria-label="Local storage note">🔒 Saved on this device only</div>
+    </div>
 
-      <div class="meta">
-        <div class="pill"><span>⏱️</span><span class="timer" id="timer">00:00</span></div>
-        <div class="pill"><span>ℹ️</span><span id="status">Ready</span></div>
+    <div class="card">
+      <div class="cardHead"></div>
+
+      <div class="grid">
+        <!-- LEFT: Prompt -->
+        <section class="prompt" id="promptBox" aria-labelledby="promptTitle">
+          <div class="promptHeader">
+            <h2 class="promptTitle" id="promptTitle">📄 Text to read aloud</h2>
+            <div class="phase isReady" id="phasePill" title="Current state">
+              <span class="phaseDot" aria-hidden="true"></span>
+              <span id="phaseText">Ready</span>
+            </div>
+          </div>
+
+          <p class="promptText" id="promptText">Please note that the office will be closed on
+Friday afternoon for scheduled maintenance.
+Employees are asked to complete any urgent tasks before noon.</p>
+
+          <div class="instruction" role="note">
+            ⏱️ You have <strong>45 seconds</strong> to prepare (read silently), then <strong>45 seconds</strong> to read aloud.
+          </div>
+        </section>
+
+        <!-- RIGHT: Controls -->
+        <aside class="panel" aria-label="Recording controls">
+          <div class="metaRow">
+            <div class="pill"><span aria-hidden="true">⏱️</span><span class="timer" id="timer">00:00</span></div>
+            <div class="pill"><span aria-hidden="true">ℹ️</span><span id="status">Ready</span></div>
+          </div>
+
+          <div class="controls">
+            <button id="start" class="btnPrimary">Start recording</button>
+            <button id="stop" class="btnDanger" disabled>Stop</button>
+            <button id="reset" class="btnGhost" disabled>Reset</button>
+            <button id="keep" class="btnSuccess" disabled>Save this take</button>
+          </div>
+
+          <div>
+            <label class="srOnly" for="player">Playback</label>
+            <audio id="player" controls></audio>
+          </div>
+
+          <div class="bottomBar">
+            <button id="download" class="btnInk" disabled>⬇️ Download this take</button>
+            <div class="spacer"></div>
+            <button id="returnBtn" class="btnReturn">↩️ Return to the module</button>
+          </div>
+
+          <div class="hint">
+            If your browser asks for permission, allow microphone access. After recording, listen to your take, then return to the module.
+          </div>
+          <div class="hint">
+            This activity is for practice and demonstration purposes only and does not reflect the exact interface or tools used during the official TOEIC exam.
+          </div>
+        </aside>
       </div>
 
-      <div class="controls">
-        <button id="start" class="btnPrimary">Start recording</button>
-        <button id="stop" class="btnDanger" disabled>Stop</button>
-        <button id="reset" class="btnGhost" disabled>Reset</button>
-        <button id="keep" class="btnSuccess" disabled>Save this take</button>
-      </div>
-
-      <audio id="player" controls></audio>
-
-      <div class="bottomBar">
-        <button id="download" class="btnDownload" disabled>⬇️ Download this take</button>
-        <div class="spacer"></div>
-        <button id="returnBtn" class="btnReturn">↩️ Return to the module</button>
-      </div>
-
-      <div class="hint">
-        If your browser asks for permission, allow microphone access. After recording, listen to your take, then return to the module.
-      </div>
-
-       <div class="hint">
-        This activity is for practice and demonstration purposes only and does not reflect the exact interface or tools used during the official TOEIC exam.
-      </div>
-
+      <!-- Saved takes -->
       <div class="saved">
-        <h3>Saved takes</h3>
+        <div class="savedHead">
+          <h3>Saved takes</h3>
+          <p class="savedNote">Tip: If you’re using a shared computer, remove your takes before leaving.</p>
+        </div>
         <div class="savedList" id="savedList"></div>
       </div>
     </div>
   </div>
 
-  <!-- PRO overlay -->
+  <!-- Return modal -->
   <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal">
       <h3 id="modalTitle">Return to the module</h3>
@@ -369,8 +510,8 @@ Employees are asked to complete any urgent tasks before noon.</p>
 
   <script>
     /***********************
-     * IndexedDB (persist takes)
-     ***********************/
+    * IndexedDB (persist takes)
+    ***********************/
     const DB_NAME = "toeic_recorder_db";
     const DB_VERSION = 1;
     const STORE = "takes";
@@ -395,11 +536,7 @@ Employees are asked to complete any urgent tasks before noon.</p>
       return new Promise((resolve, reject) => {
         const tx = db.transaction(STORE, "readwrite");
         const store = tx.objectStore(STORE);
-        const req = store.add({
-          blob,
-          durationSec,
-          createdAt: Date.now()
-        });
+        const req = store.add({ blob, durationSec, createdAt: Date.now() });
         req.onsuccess = () => resolve(req.result);
         req.onerror = () => reject(req.error);
       });
@@ -428,22 +565,26 @@ Employees are asked to complete any urgent tasks before noon.</p>
     }
 
     /***********************
-     * UI + Recorder
-     ***********************/
+    * UI + Recorder
+    ***********************/
     const startBtn = document.getElementById("start");
-    const stopBtn  = document.getElementById("stop");
+    const stopBtn = document.getElementById("stop");
     const resetBtn = document.getElementById("reset");
-    const keepBtn  = document.getElementById("keep");
-    const dlBtn    = document.getElementById("download");
-    const returnBtn= document.getElementById("returnBtn");
+    const keepBtn = document.getElementById("keep");
+    const dlBtn = document.getElementById("download");
+    const returnBtn = document.getElementById("returnBtn");
 
-    const player   = document.getElementById("player");
-    const timerEl  = document.getElementById("timer");
+    const player = document.getElementById("player");
+    const timerEl = document.getElementById("timer");
     const statusEl = document.getElementById("status");
-    const savedList= document.getElementById("savedList");
+    const savedList = document.getElementById("savedList");
 
-    const overlay  = document.getElementById("overlay");
-    const okBtn    = document.getElementById("okBtn");
+    const overlay = document.getElementById("overlay");
+    const okBtn = document.getElementById("okBtn");
+
+    /* Phase pill */
+    const phasePill = document.getElementById("phasePill");
+    const phaseText = document.getElementById("phaseText");
 
     let mediaRecorder = null;
     let chunks = [];
@@ -456,21 +597,39 @@ Employees are asked to complete any urgent tasks before noon.</p>
     let currentUrl = null;
 
     function pad(n){ return String(n).padStart(2,"0"); }
+
     function setTimer(sec){
       const m = Math.floor(sec / 60);
       const s = sec % 60;
       timerEl.textContent = `${pad(m)}:${pad(s)}`;
     }
+
     function stopTimer(){
       if(timerInterval){
         clearInterval(timerInterval);
         timerInterval = null;
       }
     }
+
     function stopMic(){
       if(stream){
         stream.getTracks().forEach(t => t.stop());
         stream = null;
+      }
+    }
+
+    function setPhase(state){
+      // state: "ready" | "recording" | "done"
+      phasePill.classList.remove("isReady","isRecording","isDone");
+      if(state === "recording"){
+        phasePill.classList.add("isRecording");
+        phaseText.textContent = "Recording";
+      } else if(state === "done"){
+        phasePill.classList.add("isDone");
+        phaseText.textContent = "Finished";
+      } else {
+        phasePill.classList.add("isReady");
+        phaseText.textContent = "Ready";
       }
     }
 
@@ -492,6 +651,8 @@ Employees are asked to complete any urgent tasks before noon.</p>
       seconds = 0;
       setTimer(0);
       statusEl.textContent = "Ready";
+      setPhase("ready");
+
       startBtn.disabled = false;
       stopBtn.disabled = true;
       chunks = [];
@@ -505,7 +666,7 @@ Employees are asked to complete any urgent tasks before noon.</p>
         "audio/ogg;codecs=opus",
         "audio/ogg"
       ];
-      return types.find(t => window.MediaRecorder && MediaRecorder.isTypeSupported(t)) || "";
+      return (types.find(t => window.MediaRecorder && MediaRecorder.isTypeSupported(t)) || "");
     }
 
     function downloadBlob(blob, filename){
@@ -553,7 +714,7 @@ Employees are asked to complete any urgent tasks before noon.</p>
       const removeBtn = document.createElement("a");
       removeBtn.href = "#";
       removeBtn.className = "linkBtn dangerLink";
-      removeBtn.textContent = "🗑️ Remove";
+      removeBtn.textContent = "Remove";
       removeBtn.onclick = async (e) => {
         e.preventDefault();
         await deleteTakeFromDB(id);
@@ -575,16 +736,13 @@ Employees are asked to complete any urgent tasks before noon.</p>
 
       item.appendChild(top);
       item.appendChild(audio);
-
       return item;
     }
 
     async function loadSavedTakes(){
       savedList.innerHTML = "";
       const takes = await getAllTakesFromDB();
-      // Sort by creation time ascending => Take 1 at top
       takes.sort((a,b) => a.createdAt - b.createdAt);
-
       takes.forEach((t, idx) => {
         savedList.appendChild(renderSavedTake(t, idx + 1));
       });
@@ -601,12 +759,13 @@ Employees are asked to complete any urgent tasks before noon.</p>
         statusEl.textContent = "Requesting microphone…";
 
         stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-
         const mimeType = getSupportedMimeType();
         mediaRecorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
 
         mediaRecorder.onstart = () => {
           statusEl.textContent = "Recording…";
+          setPhase("recording");
+
           startBtn.disabled = true;
           stopBtn.disabled = false;
 
@@ -629,11 +788,12 @@ Employees are asked to complete any urgent tasks before noon.</p>
           startBtn.disabled = false;
 
           statusEl.textContent = "Recording finished";
+          setPhase("done");
+
           resetBtn.disabled = false;
 
           const blob = new Blob(chunks, { type: mediaRecorder.mimeType || "audio/webm" });
           currentBlob = blob;
-
           currentUrl = URL.createObjectURL(blob);
           player.src = currentUrl;
 
@@ -660,6 +820,7 @@ Employees are asked to complete any urgent tasks before noon.</p>
           mediaRecorder.stop();
         } else {
           statusEl.textContent = "Stopped";
+          setPhase("done");
           startBtn.disabled = false;
           stopBtn.disabled = true;
           resetBtn.disabled = false;
@@ -678,13 +839,11 @@ Employees are asked to complete any urgent tasks before noon.</p>
       downloadBlob(currentBlob, filename);
     };
 
-    // PRO return: try close, then show overlay (no alert)
+    // Return: try close, then show overlay (no alert)
     returnBtn.addEventListener("click", (e) => {
       e.preventDefault();
       statusEl.textContent = "Returning to the module…";
-
       window.close();
-
       setTimeout(() => {
         showOverlay();
         statusEl.textContent = "Please close this tab to return to the module.";
@@ -693,18 +852,14 @@ Employees are asked to complete any urgent tasks before noon.</p>
 
     keepBtn.onclick = async () => {
       if(!currentBlob) return;
-
       try{
         statusEl.textContent = "Saving take…";
         await addTakeToDB({ blob: currentBlob, durationSec: seconds });
         await loadSavedTakes();
-
-        statusEl.textContent = "Saved. You can record another one to compare.";
-        keepBtn.disabled = true; // avoid saving same take twice
+        statusEl.textContent = "Saved.";
       } catch(err){
         console.error(err);
-        statusEl.textContent = "Save failed (storage blocked?)";
-        alert("Saving failed. Your browser may be blocking storage for this page.");
+        statusEl.textContent = "Save failed.";
       }
     };
   </script>
