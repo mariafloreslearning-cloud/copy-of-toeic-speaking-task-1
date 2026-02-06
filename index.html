@@ -180,33 +180,6 @@
       font-size: 13px;
     }
 
-    /* Timer chip + ring */
-    .timerWrap{
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-    .ring{
-      width: 42px;
-      height: 42px;
-      border-radius: 999px;
-      background:
-        conic-gradient(var(--primary) 0deg, rgba(17,24,39,.10) 0deg);
-      display:grid;
-      place-items:center;
-      flex: 0 0 auto;
-    }
-    .ringInner{
-      width: 34px;
-      height: 34px;
-      border-radius: 999px;
-      background:#fff;
-      border:1px solid rgba(17,24,39,.08);
-      display:grid;
-      place-items:center;
-      font-size: 14px;
-    }
-
     .timerChip{
       display:inline-flex;
       align-items:center;
@@ -461,14 +434,9 @@ Employees are asked to complete any urgent tasks before noon.</p>
         <!-- Controls -->
         <section class="panel" aria-label="Recording controls">
           <div class="metaRow">
-            <div class="timerWrap">
-              <div class="ring" id="ring" aria-hidden="true">
-                <div class="ringInner">⏱️</div>
-              </div>
-              <div class="timerChip">
-                <span class="timer" id="timer">00:00</span>
-              </div>
-            </div>
+            <div class="timerChip">
+  <span class="timer" id="timer">00:00</span>
+</div>
             <div class="statusLine" id="status">Ready</div>
           </div>
 
@@ -489,12 +457,6 @@ Employees are asked to complete any urgent tasks before noon.</p>
             </div>
           </div>
 
-          <div class="hint">
-            If your browser asks for permission, allow microphone access. After recording, listen to your take, then return to the module.
-          </div>
-          <div class="hint">
-            This activity is for practice and demonstration purposes only and does not reflect the exact interface or tools used during the official TOEIC exam.
-          </div>
         </section>
       </div>
 
