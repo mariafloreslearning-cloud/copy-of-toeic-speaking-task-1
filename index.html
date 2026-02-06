@@ -3,34 +3,40 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TOEIC Speaking – Read Aloud Practice</title>
+  <title>TOEIC Speaking – Read a Text Aloud</title>
+
   <style>
     :root{
-      /* Rise-ish clean neutrals + one primary */
+      /* === Rise-like palette (easy to tweak) === */
       --bg:#f6f7f9;
       --surface:#ffffff;
       --text:#111827;
       --muted:#6b7280;
       --border:#e5e7eb;
-      --shadow:0 12px 30px rgba(17,24,39,.08);
 
-      --primary:#2563eb;
-      --primaryHover:#1d4ed8;
+      /* Primary (Rise-ish blue) */
+      --primary:#2b6df3;
+      --primaryHover:#1f5fe0;
 
-      --danger:#ef4444;
-      --dangerHover:#dc2626;
+      /* Neutrals */
+      --soft:#f3f4f6;
+      --softHover:#e9edf3;
 
+      /* Accents */
+      --accent:#e7f0ff;      /* prompt background */
+      --accentBorder:#bcd6ff; /* prompt border */
       --success:#16a34a;
-      --successHover:#15803d;
+      --danger:#ef4444;
 
-      --ink:#0f172a;
-      --radius:16px;
-      --radiusSm:12px;
+      --shadow: 0 10px 26px rgba(17,24,39,.08);
+      --radius: 16px;
+      --radiusSm: 12px;
 
-      --focus: 0 0 0 3px rgba(37,99,235,.22);
+      --focus: 0 0 0 3px rgba(43,109,243,.22);
     }
 
     *{ box-sizing:border-box; }
+
     body{
       margin:0;
       background:var(--bg);
@@ -39,54 +45,30 @@
       line-height:1.5;
     }
 
-    /* Layout */
     .wrap{
-      max-width: 1040px;
+      max-width: 880px;
       margin: 0 auto;
-      padding: 24px 16px 72px;
+      padding: 26px 16px 72px;
     }
 
-    .topbar{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:16px;
+    /* Header */
+    .header{
       margin-bottom: 14px;
     }
-
-    .brand{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-    }
-
     .title{
       margin:0;
       font-size: 22px;
-      letter-spacing: -0.02em;
+      letter-spacing:-0.02em;
       line-height:1.25;
     }
     .subtitle{
-      margin:0;
-      color:var(--muted);
-      font-size: 14px;
-      max-width: 78ch;
-    }
-
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding: 8px 10px;
-      border:1px solid var(--border);
-      border-radius: 999px;
-      background: rgba(255,255,255,.6);
-      backdrop-filter: blur(6px);
-      font-size: 13px;
+      margin: 6px 0 0;
       color: var(--muted);
-      white-space: nowrap;
+      font-size: 14px;
+      max-width: 75ch;
     }
 
+    /* Main card */
     .card{
       background:var(--surface);
       border:1px solid var(--border);
@@ -95,29 +77,32 @@
       overflow:hidden;
     }
 
-    .cardHead{
-      padding: 18px 18px 0;
-    }
-
-    /* Two-column “Rise-like” content block */
-    .grid{
-      display:grid;
-      grid-template-columns: 1.15fr .85fr;
-      gap: 18px;
+    .section{
       padding: 18px;
     }
-    @media (max-width: 880px){
-      .grid{ grid-template-columns: 1fr; }
+
+    /* Prompt block (clean + colored) */
+    .prompt{
+      border:1px solid var(--accentBorder);
+      background: linear-gradient(0deg, rgba(231,240,255,.55), rgba(231,240,255,.55)), #fff;
+      border-radius: var(--radius);
+      padding: 18px;
+      position: relative;
+      overflow:hidden;
+    }
+    .prompt::before{
+      content:"";
+      position:absolute;
+      left:0; top:0; bottom:0;
+      width: 6px;
+      background: var(--primary);
+      opacity: .95;
+    }
+    .promptInner{
+      padding-left: 10px;
     }
 
-    /* Prompt block */
-    .prompt{
-      border:1px solid var(--border);
-      border-radius: var(--radiusSm);
-      background: #fbfbfc;
-      padding: 16px;
-    }
-    .promptHeader{
+    .promptHead{
       display:flex;
       align-items:center;
       justify-content:space-between;
@@ -125,37 +110,38 @@
       margin-bottom: 10px;
     }
     .promptTitle{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-weight: 700;
-      font-size: 14px;
-      color: var(--ink);
       margin:0;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text);
+      display:flex;
+      gap:10px;
+      align-items:center;
     }
 
-    .phase{
+    /* State chip */
+    .state{
       display:inline-flex;
       align-items:center;
       gap:8px;
-      padding: 6px 10px;
+      padding: 7px 10px;
       border-radius: 999px;
       font-size: 12px;
-      border:1px solid var(--border);
+      border:1px solid rgba(17,24,39,.08);
+      background: rgba(255,255,255,.75);
       color: var(--muted);
-      background:#fff;
+      white-space: nowrap;
     }
-    .phaseDot{
-      width:8px; height:8px; border-radius:999px;
+    .dot{
+      width:8px;height:8px;border-radius:999px;
       background:#cbd5e1;
     }
-    .phase.isRecording .phaseDot{ background: var(--danger); }
-    .phase.isReady .phaseDot{ background: #94a3b8; }
-    .phase.isDone .phaseDot{ background: var(--success); }
+    .state.recording .dot{ background: var(--danger); }
+    .state.done .dot{ background: var(--success); }
 
     .promptText{
       margin:0;
-      color: var(--ink);
+      color: var(--text);
       font-size: 15px;
       line-height: 1.65;
       white-space: pre-wrap;
@@ -165,58 +151,94 @@
     .instruction{
       margin-top: 12px;
       padding: 12px;
-      border-radius: 12px;
-      border:1px solid #dbeafe;
-      background:#eff6ff;
-      color:#1e3a8a;
+      border-radius: var(--radiusSm);
+      border:1px solid rgba(43,109,243,.20);
+      background: rgba(255,255,255,.75);
       font-size: 13px;
+      color:#1f3b7a;
     }
 
-    /* Right panel */
+    /* Controls area (tidy) */
     .panel{
-      display:flex;
-      flex-direction:column;
-      gap: 12px;
+      margin-top: 14px;
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      background:#fff;
     }
 
     .metaRow{
       display:flex;
+      align-items:center;
+      justify-content:space-between;
       gap:10px;
       flex-wrap:wrap;
-      align-items:center;
+      margin-bottom: 12px;
     }
-    .pill{
+    .statusLine{
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* Timer chip + ring */
+    .timerWrap{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .ring{
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      background:
+        conic-gradient(var(--primary) 0deg, rgba(17,24,39,.10) 0deg);
+      display:grid;
+      place-items:center;
+      flex: 0 0 auto;
+    }
+    .ringInner{
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background:#fff;
+      border:1px solid rgba(17,24,39,.08);
+      display:grid;
+      place-items:center;
+      font-size: 14px;
+    }
+
+    .timerChip{
       display:inline-flex;
       align-items:center;
       gap:8px;
-      padding: 9px 10px;
-      border:1px solid var(--border);
+      padding: 9px 12px;
       border-radius: 999px;
-      font-size:13px;
+      border:1px solid var(--border);
+      background: var(--soft);
+      font-size: 13px;
       color: var(--muted);
-      background:#fff;
     }
     .timer{
-      font-weight: 800;
-      color: var(--ink);
+      font-weight: 900;
+      color: var(--text);
       font-variant-numeric: tabular-nums;
       letter-spacing: .02em;
     }
 
+    /* Buttons */
     .controls{
       display:flex;
+      gap:10px;
       flex-wrap:wrap;
-      gap: 10px;
     }
-
     button{
       border:0;
       border-radius: 12px;
       padding: 11px 14px;
       font-size: 14px;
-      font-weight: 650;
+      font-weight: 750;
       cursor:pointer;
-      transition: transform .02s ease, background .15s ease, opacity .15s ease, box-shadow .15s ease;
+      transition: background .15s ease, transform .02s ease, box-shadow .15s ease, opacity .15s ease;
     }
     button:active{ transform: translateY(1px); }
     button:disabled{ opacity:.55; cursor:not-allowed; }
@@ -229,64 +251,66 @@
     .btnPrimary{ background: var(--primary); color:#fff; }
     .btnPrimary:hover{ background: var(--primaryHover); }
 
-    .btnDanger{ background: var(--danger); color:#fff; }
-    .btnDanger:hover{ background: var(--dangerHover); }
-
-    .btnSuccess{ background: var(--success); color:#fff; }
-    .btnSuccess:hover{ background: var(--successHover); }
-
-    .btnGhost{
-      background:#fff;
+    .btnNeutral{
+      background: var(--soft);
+      color: var(--text);
       border:1px solid var(--border);
-      color: var(--ink);
     }
-    .btnGhost:hover{ background:#f3f4f6; }
+    .btnNeutral:hover{ background: var(--softHover); }
 
-    .btnInk{ background: var(--ink); color:#fff; }
-    .btnInk:hover{ background:#111827; }
+    .btnDanger{
+      background: #ffecec;
+      color:#991b1b;
+      border:1px solid #fecaca;
+    }
+    .btnDanger:hover{ background: #ffdede; }
 
+    .btnSuccess{
+      background: #eafff1;
+      color:#0f5132;
+      border:1px solid #b7f0cc;
+    }
+    .btnSuccess:hover{ background: #dcffe8; }
+
+    /* Audio block */
+    .audioBlock{
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: var(--radius);
+      border:1px solid var(--border);
+      background:#fafafa;
+    }
     audio{
       width:100%;
-      margin-top: 2px;
+      margin-top: 6px;
       border-radius: 12px;
+    }
+
+    .actionsRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 10px;
+    }
+    .actionsRow button{
+      flex: 1 1 240px;
     }
 
     .hint{
-      padding: 12px 12px;
-      border-radius: 12px;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: var(--radiusSm);
       border:1px solid #e0e7ff;
       background:#f5f7ff;
       font-size: 13px;
       color:#374151;
     }
 
-    .bottomBar{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-    .bottomBar .spacer{ flex:1; }
-
-    .btnReturn{
-      background: var(--primary);
-      color:#fff;
-      padding: 12px 16px;
-      font-weight: 800;
-      box-shadow: 0 10px 22px rgba(37,99,235,.18);
-    }
-    .btnReturn:hover{ background: var(--primaryHover); }
-
-    @media (max-width: 520px){
-      .bottomBar button{ width:100%; }
-      .bottomBar .spacer{ display:none; }
-    }
-
     /* Saved takes */
     .saved{
       border-top:1px solid var(--border);
-      padding: 18px;
-      background: #fff;
+      padding: 16px 18px 18px;
+      background:#fff;
     }
     .savedHead{
       display:flex;
@@ -299,7 +323,7 @@
     .saved h3{
       margin:0;
       font-size: 16px;
-      letter-spacing: -0.01em;
+      letter-spacing:-0.01em;
     }
     .savedNote{
       margin:0;
@@ -314,7 +338,7 @@
     }
     .savedItem{
       border:1px solid var(--border);
-      border-radius: 14px;
+      border-radius: var(--radius);
       padding: 12px;
       background:#fff;
     }
@@ -336,26 +360,28 @@
       font-size:12px;
       color:var(--muted);
     }
+
     .savedActions{
       display:flex;
       gap:8px;
       flex-wrap:wrap;
     }
+
     .linkBtn{
       display:inline-flex;
       align-items:center;
       gap:8px;
-      padding: 8px 10px;
+      padding: 9px 12px;
       border:1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 12px;
       font-size: 13px;
       text-decoration:none;
-      color: var(--ink);
-      background:#fff;
+      color: var(--text);
+      background: var(--soft);
       cursor:pointer;
-      font-weight: 650;
+      font-weight: 750;
     }
-    .linkBtn:hover{ background:#f9fafb; }
+    .linkBtn:hover{ background: var(--softHover); }
 
     .dangerLink{
       border-color:#fecaca;
@@ -376,9 +402,9 @@
       z-index:9999;
     }
     .modal{
-      width:min(560px, 100%);
+      width:min(520px, 100%);
       background:#fff;
-      border-radius:16px;
+      border-radius: var(--radius);
       border:1px solid var(--border);
       box-shadow:0 18px 50px rgba(0,0,0,.25);
       padding:18px;
@@ -400,78 +426,68 @@
       flex-wrap:wrap;
       justify-content:flex-end;
     }
-
-    /* Accessibility helper */
-    .srOnly{
-      position:absolute;
-      width:1px; height:1px;
-      padding:0; margin:-1px;
-      overflow:hidden;
-      clip:rect(0,0,0,0);
-      white-space:nowrap;
-      border:0;
-    }
   </style>
 </head>
 
 <body>
   <div class="wrap">
-    <div class="topbar">
-      <div class="brand">
-        <h1 class="title">TOEIC Speaking – Read a Text Aloud</h1>
-        <p class="subtitle">
-          Click <strong>Start recording</strong>, then read the text below aloud. This is a practice tool (not the official TOEIC interface).
-        </p>
-      </div>
-      <div class="badge" aria-label="Local storage note">🔒 Saved on this device only</div>
+    <div class="header">
+      <h1 class="title">TOEIC Speaking – Read a Text Aloud</h1>
+      <p class="subtitle">Click <strong>Start recording</strong>, then read the text below aloud.</p>
     </div>
 
     <div class="card">
-      <div class="cardHead"></div>
-
-      <div class="grid">
-        <!-- LEFT: Prompt -->
+      <div class="section">
+        <!-- Prompt -->
         <section class="prompt" id="promptBox" aria-labelledby="promptTitle">
-          <div class="promptHeader">
-            <h2 class="promptTitle" id="promptTitle">📄 Text to read aloud</h2>
-            <div class="phase isReady" id="phasePill" title="Current state">
-              <span class="phaseDot" aria-hidden="true"></span>
-              <span id="phaseText">Ready</span>
+          <div class="promptInner">
+            <div class="promptHead">
+              <h2 class="promptTitle" id="promptTitle">📄 Text to read aloud</h2>
+              <div class="state" id="stateChip">
+                <span class="dot" aria-hidden="true"></span>
+                <span id="stateText">Ready</span>
+              </div>
             </div>
-          </div>
 
-          <p class="promptText" id="promptText">Please note that the office will be closed on
+            <p class="promptText" id="promptText">Please note that the office will be closed on
 Friday afternoon for scheduled maintenance.
 Employees are asked to complete any urgent tasks before noon.</p>
 
-          <div class="instruction" role="note">
-            ⏱️ You have <strong>45 seconds</strong> to prepare (read silently), then <strong>45 seconds</strong> to read aloud.
+            <div class="instruction">
+              ⏱️ You have <strong>45 seconds</strong> to prepare (read silently). You will then have <strong>45 seconds</strong> to read the text aloud.
+            </div>
           </div>
         </section>
 
-        <!-- RIGHT: Controls -->
-        <aside class="panel" aria-label="Recording controls">
+        <!-- Controls -->
+        <section class="panel" aria-label="Recording controls">
           <div class="metaRow">
-            <div class="pill"><span aria-hidden="true">⏱️</span><span class="timer" id="timer">00:00</span></div>
-            <div class="pill"><span aria-hidden="true">ℹ️</span><span id="status">Ready</span></div>
+            <div class="timerWrap">
+              <div class="ring" id="ring" aria-hidden="true">
+                <div class="ringInner">⏱️</div>
+              </div>
+              <div class="timerChip">
+                <span class="timer" id="timer">00:00</span>
+              </div>
+            </div>
+            <div class="statusLine" id="status">Ready</div>
           </div>
 
           <div class="controls">
             <button id="start" class="btnPrimary">Start recording</button>
             <button id="stop" class="btnDanger" disabled>Stop</button>
-            <button id="reset" class="btnGhost" disabled>Reset</button>
+            <button id="reset" class="btnNeutral" disabled>Reset</button>
             <button id="keep" class="btnSuccess" disabled>Save this take</button>
           </div>
 
-          <div>
-            <label class="srOnly" for="player">Playback</label>
+          <div class="audioBlock">
+            <div class="statusLine">Listen to your take:</div>
             <audio id="player" controls></audio>
-          </div>
 
-          <div class="bottomBar">
-            <button id="download" class="btnInk" disabled>⬇️ Download this take</button>
-            <div class="spacer"></div>
-            <button id="returnBtn" class="btnReturn">↩️ Return to the module</button>
+            <div class="actionsRow">
+              <button id="download" class="btnNeutral" disabled>⬇️ Download this take</button>
+              <button id="returnBtn" class="btnPrimary">↩️ Return to the module</button>
+            </div>
           </div>
 
           <div class="hint">
@@ -480,7 +496,7 @@ Employees are asked to complete any urgent tasks before noon.</p>
           <div class="hint">
             This activity is for practice and demonstration purposes only and does not reflect the exact interface or tools used during the official TOEIC exam.
           </div>
-        </aside>
+        </section>
       </div>
 
       <!-- Saved takes -->
@@ -498,10 +514,7 @@ Employees are asked to complete any urgent tasks before noon.</p>
   <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal">
       <h3 id="modalTitle">Return to the module</h3>
-      <p>
-        Your browser may block automatic tab closing.
-        Please <strong>close this tab manually</strong> to return to the e-learning module.
-      </p>
+      <p>Your browser may block automatic tab closing. Please <strong>close this tab manually</strong> to return to the e-learning module.</p>
       <div class="row">
         <button id="okBtn" class="btnPrimary">OK</button>
       </div>
@@ -572,19 +585,20 @@ Employees are asked to complete any urgent tasks before noon.</p>
     const resetBtn = document.getElementById("reset");
     const keepBtn = document.getElementById("keep");
     const dlBtn = document.getElementById("download");
-    const returnBtn = document.getElementById("returnBtn");
+    const returnBtn= document.getElementById("returnBtn");
 
     const player = document.getElementById("player");
     const timerEl = document.getElementById("timer");
     const statusEl = document.getElementById("status");
-    const savedList = document.getElementById("savedList");
+    const savedList= document.getElementById("savedList");
 
     const overlay = document.getElementById("overlay");
     const okBtn = document.getElementById("okBtn");
 
-    /* Phase pill */
-    const phasePill = document.getElementById("phasePill");
-    const phaseText = document.getElementById("phaseText");
+    const stateChip = document.getElementById("stateChip");
+    const stateText = document.getElementById("stateText");
+
+    const ring = document.getElementById("ring");
 
     let mediaRecorder = null;
     let chunks = [];
@@ -604,6 +618,12 @@ Employees are asked to complete any urgent tasks before noon.</p>
       timerEl.textContent = `${pad(m)}:${pad(s)}`;
     }
 
+    function setRingProgress(pct){
+      // pct: 0..1
+      const deg = Math.max(0, Math.min(1, pct)) * 360;
+      ring.style.background = `conic-gradient(var(--primary) ${deg}deg, rgba(17,24,39,.10) 0deg)`;
+    }
+
     function stopTimer(){
       if(timerInterval){
         clearInterval(timerInterval);
@@ -618,18 +638,17 @@ Employees are asked to complete any urgent tasks before noon.</p>
       }
     }
 
-    function setPhase(state){
-      // state: "ready" | "recording" | "done"
-      phasePill.classList.remove("isReady","isRecording","isDone");
-      if(state === "recording"){
-        phasePill.classList.add("isRecording");
-        phaseText.textContent = "Recording";
-      } else if(state === "done"){
-        phasePill.classList.add("isDone");
-        phaseText.textContent = "Finished";
+    function setState(mode){
+      // mode: ready | recording | done
+      stateChip.classList.remove("recording","done");
+      if(mode === "recording"){
+        stateChip.classList.add("recording");
+        stateText.textContent = "Recording";
+      } else if(mode === "done"){
+        stateChip.classList.add("done");
+        stateText.textContent = "Finished";
       } else {
-        phasePill.classList.add("isReady");
-        phaseText.textContent = "Ready";
+        stateText.textContent = "Ready";
       }
     }
 
@@ -650,11 +669,14 @@ Employees are asked to complete any urgent tasks before noon.</p>
       stopTimer();
       seconds = 0;
       setTimer(0);
+      setRingProgress(0);
+
       statusEl.textContent = "Ready";
-      setPhase("ready");
+      setState("ready");
 
       startBtn.disabled = false;
       stopBtn.disabled = true;
+
       chunks = [];
       resetCurrentTakeUI();
     }
@@ -666,7 +688,7 @@ Employees are asked to complete any urgent tasks before noon.</p>
         "audio/ogg;codecs=opus",
         "audio/ogg"
       ];
-      return (types.find(t => window.MediaRecorder && MediaRecorder.isTypeSupported(t)) || "");
+      return types.find(t => window.MediaRecorder && MediaRecorder.isTypeSupported(t)) || "";
     }
 
     function downloadBlob(blob, filename){
@@ -750,7 +772,7 @@ Employees are asked to complete any urgent tasks before noon.</p>
 
     // Init
     resetUI();
-    loadSavedTakes().catch(() => { /* ignore */ });
+    loadSavedTakes().catch(() => {});
 
     startBtn.onclick = async () => {
       try{
@@ -764,17 +786,23 @@ Employees are asked to complete any urgent tasks before noon.</p>
 
         mediaRecorder.onstart = () => {
           statusEl.textContent = "Recording…";
-          setPhase("recording");
+          setState("recording");
 
           startBtn.disabled = true;
           stopBtn.disabled = false;
 
           seconds = 0;
           setTimer(0);
+          setRingProgress(0);
+
           stopTimer();
           timerInterval = setInterval(() => {
             seconds++;
             setTimer(seconds);
+
+            // Purely visual: ring moves for first 45s (TOEIC speaking part 1 timing)
+            const pct = Math.min(seconds / 45, 1);
+            setRingProgress(pct);
           }, 1000);
         };
 
@@ -787,8 +815,8 @@ Employees are asked to complete any urgent tasks before noon.</p>
           stopBtn.disabled = true;
           startBtn.disabled = false;
 
-          statusEl.textContent = "Recording finished";
-          setPhase("done");
+          statusEl.textContent = "Saved locally (not submitted).";
+          setState("done");
 
           resetBtn.disabled = false;
 
@@ -820,7 +848,7 @@ Employees are asked to complete any urgent tasks before noon.</p>
           mediaRecorder.stop();
         } else {
           statusEl.textContent = "Stopped";
-          setPhase("done");
+          setState("done");
           startBtn.disabled = false;
           stopBtn.disabled = true;
           resetBtn.disabled = false;
@@ -839,7 +867,6 @@ Employees are asked to complete any urgent tasks before noon.</p>
       downloadBlob(currentBlob, filename);
     };
 
-    // Return: try close, then show overlay (no alert)
     returnBtn.addEventListener("click", (e) => {
       e.preventDefault();
       statusEl.textContent = "Returning to the module…";
@@ -856,7 +883,7 @@ Employees are asked to complete any urgent tasks before noon.</p>
         statusEl.textContent = "Saving take…";
         await addTakeToDB({ blob: currentBlob, durationSec: seconds });
         await loadSavedTakes();
-        statusEl.textContent = "Saved.";
+        statusEl.textContent = "Take saved on this device.";
       } catch(err){
         console.error(err);
         statusEl.textContent = "Save failed.";
