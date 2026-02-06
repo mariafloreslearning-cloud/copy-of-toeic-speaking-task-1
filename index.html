@@ -269,16 +269,6 @@
       flex: 1 1 240px;
     }
 
-    .hint{
-      margin-top: 12px;
-      padding: 12px;
-      border-radius: var(--radiusSm);
-      border:1px solid #e0e7ff;
-      background:#f5f7ff;
-      font-size: 13px;
-      color:#374151;
-    }
-
     /* Saved takes */
     .saved{
       border-top:1px solid var(--border);
@@ -435,8 +425,8 @@ Employees are asked to complete any urgent tasks before noon.</p>
         <section class="panel" aria-label="Recording controls">
           <div class="metaRow">
             <div class="timerChip">
-  <span class="timer" id="timer">00:00</span>
-</div>
+              <span class="timer" id="timer">00:00</span>
+            </div>
             <div class="statusLine" id="status">Ready</div>
           </div>
 
@@ -456,7 +446,6 @@ Employees are asked to complete any urgent tasks before noon.</p>
               <button id="returnBtn" class="btnPrimary">↩️ Return to the module</button>
             </div>
           </div>
-
         </section>
       </div>
 
@@ -542,24 +531,22 @@ Employees are asked to complete any urgent tasks before noon.</p>
     * UI + Recorder
     ***********************/
     const startBtn = document.getElementById("start");
-    const stopBtn = document.getElementById("stop");
+    const stopBtn  = document.getElementById("stop");
     const resetBtn = document.getElementById("reset");
-    const keepBtn = document.getElementById("keep");
-    const dlBtn = document.getElementById("download");
+    const keepBtn  = document.getElementById("keep");
+    const dlBtn    = document.getElementById("download");
     const returnBtn= document.getElementById("returnBtn");
 
-    const player = document.getElementById("player");
-    const timerEl = document.getElementById("timer");
+    const player   = document.getElementById("player");
+    const timerEl  = document.getElementById("timer");
     const statusEl = document.getElementById("status");
     const savedList= document.getElementById("savedList");
 
-    const overlay = document.getElementById("overlay");
-    const okBtn = document.getElementById("okBtn");
+    const overlay  = document.getElementById("overlay");
+    const okBtn    = document.getElementById("okBtn");
 
-    const stateChip = document.getElementById("stateChip");
-    const stateText = document.getElementById("stateText");
-
-    const ring = document.getElementById("ring");
+    const stateChip= document.getElementById("stateChip");
+    const stateText= document.getElementById("stateText");
 
     let mediaRecorder = null;
     let chunks = [];
@@ -577,12 +564,6 @@ Employees are asked to complete any urgent tasks before noon.</p>
       const m = Math.floor(sec / 60);
       const s = sec % 60;
       timerEl.textContent = `${pad(m)}:${pad(s)}`;
-    }
-
-    function setRingProgress(pct){
-      // pct: 0..1
-      const deg = Math.max(0, Math.min(1, pct)) * 360;
-      ring.style.background = `conic-gradient(var(--primary) ${deg}deg, rgba(17,24,39,.10) 0deg)`;
     }
 
     function stopTimer(){
@@ -630,7 +611,6 @@ Employees are asked to complete any urgent tasks before noon.</p>
       stopTimer();
       seconds = 0;
       setTimer(0);
-      setRingProgress(0);
 
       statusEl.textContent = "Ready";
       setState("ready");
@@ -754,16 +734,11 @@ Employees are asked to complete any urgent tasks before noon.</p>
 
           seconds = 0;
           setTimer(0);
-          setRingProgress(0);
 
           stopTimer();
           timerInterval = setInterval(() => {
             seconds++;
             setTimer(seconds);
-
-            // Purely visual: ring moves for first 45s (TOEIC speaking part 1 timing)
-            const pct = Math.min(seconds / 45, 1);
-            setRingProgress(pct);
           }, 1000);
         };
 
